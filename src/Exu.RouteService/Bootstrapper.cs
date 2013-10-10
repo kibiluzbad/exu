@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using Autofac;
 using AutoMapper;
 using Exu.RouteService.Domain;
+using Exu.RouteService.Queries;
+using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 
@@ -20,7 +24,21 @@ namespace Exu.RouteService
 
         protected override void ConfigureApplicationContainer(ILifetimeScope existingContainer)
         {
-            //TODO: Add dependencies here
+            var builder = new ContainerBuilder();
+            var assembly = Assembly.GetExecutingAssembly();
+
+            builder.RegisterAssemblyModules(assembly);
+            
+            builder.RegisterType<MaplinkRouteQuery>()
+                .WithParameter("token", ConfigurationManager.AppSettings["token"])
+                .As<IRouteQuery>();
+
+            builder.RegisterType<MaplinkAddressQuery>()
+                .WithParameter("token", ConfigurationManager.AppSettings["token"])
+                .As<IAddressQuery>();
+
+            builder.Update(existingContainer.ComponentRegistry);
+            
             base.ConfigureApplicationContainer(existingContainer);
         }
     }
