@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsQuery.ExtensionMethods;
 using Exu.RouteService.Controllers;
+using Exu.RouteService.Domain;
 using Nancy;
 using Nancy.Testing;
 using Xunit;
@@ -37,8 +38,29 @@ namespace Exu.RouteService.Tests
             var bootstrapper = new Bootstrapper();
             var browser = new Browser(bootstrapper);
 
-            var query = new Query { Addresses = new List<Address> { new Address(), new Address() }, Type = RouteType.FastestRoute };
-            var routes = "[{\"Time\":{\"Days\":0,\"Hours\":0,\"Minutes\":30,\"Seconds\":0,\"Milliseconds\":0},\"Distance\":1,\"FuelCost\":1,\"TotalCost\":1}]";
+            var query = new Query
+            {
+                Addresses = new List<Address>
+                {
+                    new Address
+                    {
+                        City = "São Paulo",
+                        State = "SP",
+                        Name = "Av. Paulista",
+                        Number = "1000"
+                    },
+                    new Address
+                    {
+                        City = "São Paulo",
+                        State = "SP",
+                        Name = "Av. Paulista",
+                        Number = "2000"
+                    }
+                },
+                Type = RouteType.FastestRoute
+            };
+            var routes =
+                "[{\"Time\":{\"Days\":0,\"Hours\":0,\"Minutes\":30,\"Seconds\":0,\"Milliseconds\":0},\"Distance\":1,\"FuelCost\":1,\"TotalCost\":1}]";
 
             var result = browser.Get("/", with =>
             {
