@@ -33,6 +33,7 @@ namespace Exu.RouteService.Controllers
         private Route GetRoute(Query query)
         {
             _addressFinder.Addresses = query.Addresses;
+            _routefinder.RouteType = query.Type;
             _routefinder.Coordinates = _addressFinder.Execute();
             return _routefinder.Execute();
         }

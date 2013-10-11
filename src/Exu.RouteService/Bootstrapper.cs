@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using Autofac;
 using AutoMapper;
-using Exu.RouteService.Domain;
+using Exu.RouteService.Profile;
 using Exu.RouteService.Queries;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -20,6 +21,10 @@ namespace Exu.RouteService
         {
             Mapper.AddProfile(new AddressToMaplinkAddress());
             Mapper.AddProfile(new MaplinkAddressLocationToCoordinate());
+            Mapper.AddProfile(new RouteTypeToInt());
+            Mapper.AddProfile(new CoordinateToMaplinkRouteStop());
+            Mapper.AddProfile(new MaplinkRouteTotalsToRoute());
+
             base.ApplicationStartup(container, pipelines);
         }
 
@@ -43,32 +48,6 @@ namespace Exu.RouteService
             builder.Update(container.ComponentRegistry);
 
             base.ConfigureRequestContainer(container, context);
-        }
-    }
-
-    public class MaplinkAddressLocationToCoordinate : Profile
-    {
-        protected override void Configure()
-        {
-            CreateMap<Maplink.AddressLocation, Coordinate>()
-                .ForMember(c => c.X,expression => expression.MapFrom(c => c.point.x))
-                .ForMember(c => c.Y,expression => expression.MapFrom(c => c.point.y));
-        }
-    }
-
-    public class AddressToMaplinkAddress : Profile
-    {
-        protected override void Configure()
-        {
-            CreateMap<Address, Maplink.Address>()
-                .ForMember(c => c.city, expression => expression.MapFrom(c => new Maplink.City{ name = c.City, 
-                    state = c.State}))
-                .ForMember(c => c.street, expression => expression.MapFrom(c => c.Name))
-                .ForMember(c => c.houseNumber, expression => expression.MapFrom(c => c.Number))
-                .ForMember(c => c.district, expression => expression.Ignore())
-                .ForMember(c => c.ExtensionData, expression => expression.Ignore())
-                .ForMember(c => c.zip, expression => expression.Ignore());
-
         }
     }
 }

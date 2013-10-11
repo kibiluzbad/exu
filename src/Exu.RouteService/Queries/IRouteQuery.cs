@@ -7,5 +7,6 @@ namespace Exu.RouteService.Queries
     public interface IRouteQuery : IQuery<Route>
     {
         IEnumerable<Coordinate> Coordinates { get; set; }
+        RouteType RouteType { get; set; }
     }
 }
