@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Exu.RouteService.Domain;
 using Exu.RouteService.Infra.Query;
-using Exu.RouteService.Maplink;
+using Exu.RouteService.MaplinkRoute;
 
 namespace Exu.RouteService.Queries
 {
@@ -11,22 +11,17 @@ namespace Exu.RouteService.Queries
         IEnumerable<Coordinate> Coordinates { get; set; }
     }
 
-    public class MaplinkRouteQuery : WcfBasicHttpQueryBase<IEnumerable<Coordinate>, object>
+    public class MaplinkRouteQuery : WcfBasicHttpQueryBase<Route, MaplinkRoute.RouteSoap>
             , IRouteQuery
     {
-        protected override Func<object, IEnumerable<Coordinate>> GetExecuteMethod
+        protected override Func<RouteSoap, Route> GetExecuteMethod
         {
             get { throw new NotImplementedException(); }
         }
 
         protected override string ConfigurationName
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Route Execute()
-        {
-            throw new NotImplementedException();
+            get { return "RouteSoap"; }
         }
 
         public IEnumerable<Coordinate> Coordinates { get; set; }

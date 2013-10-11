@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace Exu.RouteService.Infra.Query
 {
@@ -15,9 +16,7 @@ namespace Exu.RouteService.Infra.Query
 
         protected virtual TServiceContract CreateChannelFactory()
         {
-            var binding = new BasicHttpBinding(ConfigurationName);
-            
-             return new ChannelFactory<TServiceContract>(binding).CreateChannel();
+            return new ChannelFactory<TServiceContract>(ConfigurationName).CreateChannel();
         }
 
         protected abstract string ConfigurationName { get; }

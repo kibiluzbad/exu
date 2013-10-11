@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="682d8c38-ce15-46e9-a9a9-128ae323c1e4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="34141ff6-8ac1-4c97-a511-f97b10c7b2fc" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://services.maplink.com.br/webservices/v3/AddressFinder/AddressFinder.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://services.maplink.com.br/webservices/v3/route/route.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="AddressFinder.wsdl" MetadataType="Wsdl" ID="8d85d7ea-43dc-41d3-8a0d-3285046a2c20" SourceId="1" SourceUrl="http://services.maplink.com.br/webservices/v3/AddressFinder/AddressFinder.asmx?wsdl" />
-    <MetadataFile FileName="AddressFinder.disco" MetadataType="Disco" ID="7058010d-3f13-4c07-bb04-8c4fb50e1ff1" SourceId="1" SourceUrl="http://services.maplink.com.br/webservices/v3/AddressFinder/AddressFinder.asmx?disco" />
+    <MetadataFile FileName="route.disco" MetadataType="Disco" ID="36d0dec4-b107-40dc-ae8c-855dd14237a7" SourceId="1" SourceUrl="http://services.maplink.com.br/webservices/v3/route/route.asmx?disco" />
+    <MetadataFile FileName="route.wsdl" MetadataType="Wsdl" ID="f67255dc-cbb0-467f-9209-9fc88f60fdbe" SourceId="1" SourceUrl="http://services.maplink.com.br/webservices/v3/route/route.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

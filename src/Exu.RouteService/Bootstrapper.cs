@@ -19,6 +19,7 @@ namespace Exu.RouteService
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
         {
             AutoMapper.Mapper.AddProfile(new AddressToMaplinkAddress());
+            AutoMapper.Mapper.AddProfile(new MaplinkAddressLocationToCoordinate());
             base.ApplicationStartup(container, pipelines);
         }
 
@@ -40,6 +41,16 @@ namespace Exu.RouteService
             builder.Update(existingContainer.ComponentRegistry);
             
             base.ConfigureApplicationContainer(existingContainer);
+        }
+    }
+
+    public class MaplinkAddressLocationToCoordinate : Profile
+    {
+        protected override void Configure()
+        {
+            CreateMap<Maplink.AddressLocation, Coordinate>()
+                .ForMember(c => c.X,expression => expression.MapFrom(c => c.point.x))
+                .ForMember(c => c.Y,expression => expression.MapFrom(c => c.point.y));
         }
     }
 
