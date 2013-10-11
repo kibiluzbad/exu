@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Exu.RouteService.Domain;
 using Exu.RouteService.Infra.Query;
 
@@ -25,21 +26,30 @@ namespace Exu.RouteService.Queries
             get
             {
                 return client =>
-                    AutoMapper.Mapper.Map<IEnumerable<Maplink.AddressLocation>, IEnumerable<Coordinate>>(
+                    Mapper.Map<IEnumerable<Maplink.AddressLocation>, IEnumerable<Coordinate>>(
                         Addresses.SelectMany(
                             address =>
-                                client.findAddress(new Maplink.findAddressRequest(new Maplink.findAddressRequestBody(AutoMapper.Mapper.Map<Address, Maplink.Address>(address),
-                                    new Maplink.AddressOptions
-                                    {
-                                        resultRange = new Maplink.ResultRange
-                                        {
-                                            pageIndex = 1,
-                                            recordsPerPage = 1000
-                                        },
-                                        searchType = 0
-                                    }, _token))).Body.findAddressResult.addressLocation)
+                                client.findAddress(
+                                    new Maplink.findAddressRequest(
+                                        new Maplink.findAddressRequestBody(
+                                            Mapper.Map<Address, Maplink.Address>(address),
+                                            GetAddressOptions(),
+                                            _token))).Body.findAddressResult.addressLocation)
                             .ToList());
             }
+        }
+
+        private static Maplink.AddressOptions GetAddressOptions()
+        {
+            return new Maplink.AddressOptions
+            {
+                resultRange = new Maplink.ResultRange
+                {
+                    pageIndex = 1,
+                    recordsPerPage = 1000
+                },
+                searchType = 0
+            };
         }
 
         protected override string ConfigurationName

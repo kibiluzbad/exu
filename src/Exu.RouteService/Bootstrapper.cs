@@ -18,29 +18,31 @@ namespace Exu.RouteService
     {
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
         {
-            AutoMapper.Mapper.AddProfile(new AddressToMaplinkAddress());
-            AutoMapper.Mapper.AddProfile(new MaplinkAddressLocationToCoordinate());
+            Mapper.AddProfile(new AddressToMaplinkAddress());
+            Mapper.AddProfile(new MaplinkAddressLocationToCoordinate());
             base.ApplicationStartup(container, pipelines);
         }
 
-        protected override void ConfigureApplicationContainer(ILifetimeScope existingContainer)
+        protected override void ConfigureRequestContainer(ILifetimeScope container, NancyContext context)
         {
             var builder = new ContainerBuilder();
             var assembly = Assembly.GetExecutingAssembly();
 
             builder.RegisterAssemblyModules(assembly);
-            
+
             builder.RegisterType<MaplinkRouteQuery>()
                 .WithParameter("token", ConfigurationManager.AppSettings["token"])
-                .As<IRouteQuery>();
+                .As<IRouteQuery>()
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<MaplinkAddressQuery>()
                 .WithParameter("token", ConfigurationManager.AppSettings["token"])
-                .As<IAddressQuery>();
+                .As<IAddressQuery>()
+                .InstancePerLifetimeScope();
 
-            builder.Update(existingContainer.ComponentRegistry);
-            
-            base.ConfigureApplicationContainer(existingContainer);
+            builder.Update(container.ComponentRegistry);
+
+            base.ConfigureRequestContainer(container, context);
         }
     }
 
