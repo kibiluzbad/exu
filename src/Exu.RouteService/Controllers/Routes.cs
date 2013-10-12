@@ -20,7 +20,7 @@ namespace Exu.RouteService.Controllers
             _addressFinder = addressFinder;
             _routefinder = routefinder;
 
-            Get["/"] = _ =>
+            Post["/"] = _ =>
             {
                 var query = this.Bind<Query>();
 
@@ -28,6 +28,8 @@ namespace Exu.RouteService.Controllers
                     ? HttpStatusCode.BadRequest 
                     : Response.AsJson(GetRoute(query));
             };
+
+            Get["/"] = _ => "OK";
         }
 
         private Route GetRoute(Query query)

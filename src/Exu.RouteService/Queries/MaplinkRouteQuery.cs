@@ -38,7 +38,15 @@ namespace Exu.RouteService.Queries
 
         private RouteOptions GetRouteOptions()
         {
-            return new RouteOptions{ routeDetails = new RouteDetails{routeType = AutoMapper.Mapper.Map<RouteType, int>(RouteType)}};
+            return new RouteOptions
+                       {
+                           routeDetails = new RouteDetails
+                                              {
+                                                  routeType = AutoMapper.Mapper.Map<RouteType, int>(RouteType)
+                                              },
+                           vehicle = new Vehicle{averageConsumption = 10, fuelPrice = 2.67, tankCapacity = 50}
+
+                       };
         }
 
         private IEnumerable<RouteStop> GetRouteStop()

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Exu.RouteService.Tests
 {
-    [Trait("Cálculos de valores totais da rota.", "Cálculos de valores totais da rota.")]
+    [Trait("Routes", "Cálculos de valores totais da rota.")]
     public class RoutesTests
     {
         [Fact(DisplayName = "Ao chamar a raiz devo retornar HTTP Status OK (200)")]
@@ -22,12 +22,9 @@ namespace Exu.RouteService.Tests
             var bootstrapper = new FakeBoostrapper();
             var browser = new Browser(bootstrapper);
 
-            var query = new Query { Addresses = new List<Address> { new Address(), new Address() }, Type = RouteType.FastestRoute };
-            
             var result = browser.Get("/", with =>
             {
                 with.HttpRequest();
-                with.JsonBody(query);
             });
             
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
@@ -65,7 +62,7 @@ namespace Exu.RouteService.Tests
 
             bootstrapper.RouteQuery = GetRoute1();
 
-            var result = browser.Get("/", with =>
+            var result = browser.Post("/", with =>
             {
                 with.HttpRequest();
                 with.JsonBody(query);
@@ -107,7 +104,7 @@ namespace Exu.RouteService.Tests
 
             bootstrapper.RouteQuery = GetRoute2();
 
-            var result = browser.Get("/", with =>
+            var result = browser.Post("/", with =>
             {
                 with.HttpRequest();
                 with.JsonBody(query);
@@ -146,7 +143,7 @@ namespace Exu.RouteService.Tests
 
             var query = new Query { Addresses = new List<Address>(), Type = RouteType.LessTraffic };
            
-            var result = browser.Get("/", with =>
+            var result = browser.Post("/", with =>
             {
                 with.HttpRequest();
                 with.JsonBody(query);
@@ -161,7 +158,7 @@ namespace Exu.RouteService.Tests
             var bootstrapper = new FakeBoostrapper();
             var browser = new Browser(bootstrapper);
 
-            var result = browser.Get("/", with =>
+            var result = browser.Post("/", with =>
             {
                 with.HttpRequest();
             });
