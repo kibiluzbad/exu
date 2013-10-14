@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsQuery.ExtensionMethods;
 using Exu.RouteService.Domain;
+using Exu.RouteService.Exceptions;
 using Exu.RouteService.Queries;
 using Moq;
 using Nancy;
@@ -164,6 +165,36 @@ namespace Exu.RouteService.Tests
             });
 
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+        [Fact(DisplayName = "Se um dos endereços informados for inválido um erro 500 deve ser retornado")]
+        public void EnderecoInvalido()
+        {
+            var bootstrapper = new FakeBoostrapper();
+
+            bootstrapper.AddressQuery = () =>
+                                            {
+                                                var fake = new Mock<IAddressQuery>();
+                                                fake.Setup(c => c.Execute())
+                                                    .Returns(() =>
+                                                                 {
+                                                                     throw new AddressNotFoundException(
+                                                                         "Endereço inválido");
+                                                                 });
+                                                return fake.Object;
+                                            };
+
+        var browser = new Browser(bootstrapper);
+
+            var query = new Query { Addresses = new List<Address>{new Address{Name = "Ebdereco invalido"}}, Type = RouteType.LessTraffic };
+
+            var result = browser.Post("/", with =>
+            {
+                with.HttpRequest();
+                with.JsonBody(query);
+            });
+
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
         }
     }
 }

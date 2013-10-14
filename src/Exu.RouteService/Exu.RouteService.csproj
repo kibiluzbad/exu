@@ -57,6 +57,9 @@
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>..\packages\Nancy.Hosting.Aspnet.0.20.0\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -190,6 +193,7 @@
     <Compile Include="Domain\Coordinate.cs" />
     <Compile Include="Profile\MaplinkAddressLocationToCoordinate.cs" />
     <Compile Include="Profile\MaplinkRouteTotalsToRoute.cs" />
+    <Compile Include="Exceptions\AddressNotFoundException.cs" />
     <Compile Include="Queries\IAddressQuery.cs" />
     <Compile Include="Infra\Query\IQuery.cs" />
     <Compile Include="Queries\IRouteQuery.cs" />
@@ -224,6 +228,7 @@
     <Content Include="packages.config" />
     <Content Include="Service References\Maplink\AddressFinder.wsdl" />
     <Content Include="Service References\MaplinkRoute\route.wsdl" />
+    <Content Include="NLog.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -248,9 +253,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>2865</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:37447/</IISUrl>
+          <IISUrl>http://localhost:3030/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

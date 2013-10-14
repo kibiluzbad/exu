@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Exu.RouteService.Domain;
+using Exu.RouteService.Exceptions;
 using Exu.RouteService.Infra.Query;
 
 namespace Exu.RouteService.Queries
@@ -29,12 +30,18 @@ namespace Exu.RouteService.Queries
                     Mapper.Map<IEnumerable<Maplink.AddressLocation>, IEnumerable<Coordinate>>(
                         Addresses.SelectMany(
                             address =>
-                                client.findAddress(
-                                    new Maplink.findAddressRequest(
-                                        new Maplink.findAddressRequestBody(
-                                            Mapper.Map<Address, Maplink.Address>(address),
-                                            GetAddressOptions(),
-                                            _token))).Body.findAddressResult.addressLocation)
+                                {
+                                    var result = client.findAddress(
+                                        new Maplink.findAddressRequest(
+                                            new Maplink.findAddressRequestBody(
+                                                Mapper.Map<Address, Maplink.Address>(address),
+                                                GetAddressOptions(),
+                                                _token)));
+                                    if (!result.Body.findAddressResult.addressLocation.Any())
+                                        throw new AddressNotFoundException(
+                                            string.Format("Não foi possível encontrar o endereço {0}.", address));
+                                    return result.Body.findAddressResult.addressLocation;
+                                })
                             .ToList());
             }
         }

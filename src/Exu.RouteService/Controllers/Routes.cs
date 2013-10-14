@@ -1,9 +1,13 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Web;
 using Exu.RouteService.Domain;
+using Exu.RouteService.Exceptions;
 using Exu.RouteService.Queries;
+using NLog;
 using Nancy;
+using Nancy.ErrorHandling;
 using Nancy.Responses;
 using Nancy.ModelBinding;
 
@@ -24,9 +28,16 @@ namespace Exu.RouteService.Controllers
             {
                 var query = this.Bind<Query>();
 
-                return NoQueryOrAdderessesFound(query) 
-                    ? HttpStatusCode.BadRequest 
-                    : Response.AsJson(GetRoute(query));
+                try
+                {
+                    return NoQueryOrAdderessesFound(query)
+                               ? HttpStatusCode.BadRequest
+                               : Response.AsJson(GetRoute(query));
+                }
+                catch(ApplicationException exception)
+                {
+                    return Response.AsJson(exception.Message, HttpStatusCode.InternalServerError);
+                }
             };
 
             Get["/"] = _ => "OK";
@@ -43,6 +54,27 @@ namespace Exu.RouteService.Controllers
         private static bool NoQueryOrAdderessesFound(Query query)
         {
             return null == query || null == query.Addresses || !query.Addresses.Any();
+        }
+    }
+
+    public class NLogErrorHandler : IErrorHandler
+    {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        public bool HandlesStatusCode(HttpStatusCode statusCode, NancyContext context)
+        {
+            return statusCode == HttpStatusCode.InternalServerError;
+        }
+
+        public void Handle(HttpStatusCode statusCode, NancyContext context)
+        {
+            object errorObject;
+            context.Items.TryGetValue(NancyEngine.ERROR_EXCEPTION, out errorObject);
+
+            if (null == errorObject) return;
+            var error = (errorObject as Exception).InnerException;
+
+            _logger.Fatal(error.Message, error);
         }
     }
 }
