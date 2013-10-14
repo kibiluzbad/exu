@@ -7,7 +7,7 @@ Serviço para realização de cálculos de valores totais de rotas utilizando as api
 Api
 ---
 
-Considerando que seu servidor esteja na posta 3030.
+Considerando que seu servidor esteja na porta 3030.
 
 ### CalculaRota
 
