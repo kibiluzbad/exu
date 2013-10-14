@@ -42,6 +42,7 @@ Status code: 200
 	"TotalCost":0.45}
 	
 Exemplo no AppHb:
+---
 
 O link abaixo possui um deploy de serviço Exu no AppHarbor, o mesmo pode ser utilizado para testes:
 
